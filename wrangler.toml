@@ -1,0 +1,24 @@
+name = "111elite-site"
+compatibility_date = "2024-01-01"
+pages_build_output_dir = "./dist"
+
+# D1 and KV bindings are commented out until the CF API token has Account-level permissions.
+# To add: create a new CF token with Workers KV + D1 read/write permissions, then:
+#   wrangler d1 create 111elite-bookings
+#   wrangler kv:namespace create RATE_LIMIT_KV
+# Uncomment and fill IDs below, then redeploy.
+
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "111elite-bookings"
+# database_id = "FILL_AFTER_D1_CREATE"
+
+# [[kv_namespaces]]
+# binding = "RATE_LIMIT_KV"
+# id = "FILL_AFTER_KV_CREATE"
+
+# Env vars are set in CF Pages dashboard (Settings > Environment variables):
+#   ALEX_EMAIL     — Alex's personal email address
+#   ALEX_PHONE     — Alex's 10-digit cell number (digits only, no dashes)
+#   FROM_EMAIL     — book@111elitecarservice.com
+#   RESEND_API_KEY — optional fallback if MailChannels unavailable
