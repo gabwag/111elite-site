@@ -217,10 +217,8 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   if (digits.length === 10) normalizedPhone = `+1${digits}`
   else if (digits.length === 11 && digits.startsWith('1')) normalizedPhone = `+${digits}`
   else if (booking.phone.startsWith('+')) normalizedPhone = booking.phone
-  // Notes: include pickup as a fallback (Cal.com's prefill for the location radioInput is unreliable).
-  // Alex will see the pickup in both places if prefill works, or only in Notes if it doesn't.
+  // Notes: passengers + requested time + customer notes only (pickup/dropoff have their own fields).
   const notesForCal = [
-    `Pickup: ${booking.pickup}`,
     `Passengers: ${booking.passengers}`,
     `Requested time: ${booking.time}`,
     booking.notes ? `Customer notes: ${booking.notes}` : '',
@@ -228,16 +226,13 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const calParams = new URLSearchParams({
     name: booking.name,
     email: booking.email,
-    // Phone field — send under multiple param names for compatibility across Cal.com versions
+    // Phone — try multiple aliases. smsReminderNumber is the workflow-added field shown in the UI.
+    smsReminderNumber: normalizedPhone,
     'attendeePhoneNumber': normalizedPhone,
     phone: normalizedPhone,
-    smsReminderNumber: normalizedPhone,
-    // Pickup → "Pick-up location" radioInput. Try multiple param shapes — Cal.com version dependent.
-    location: booking.pickup,
-    attendeeAddress: booking.pickup,
-    'location[value]': 'attendeeInPerson',
-    'location[optionValue]': booking.pickup,
-    // Dropoff → dedicated custom field "Destination-address" (slug is case-sensitive)
+    // Pickup → dedicated custom text field "pickup-address" (reliably prefillable + exposes {pickup-address} workflow token)
+    'pickup-address': booking.pickup,
+    // Dropoff → dedicated custom text field "Destination-address" (case-sensitive slug)
     'Destination-address': booking.dropoff || '',
     notes: notesForCal,
     'metadata[pickup]': booking.pickup,
