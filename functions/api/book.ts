@@ -228,7 +228,10 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const calParams = new URLSearchParams({
     name: booking.name,
     email: booking.email,
+    // Phone field — send under multiple param names for compatibility across Cal.com versions
     'attendeePhoneNumber': normalizedPhone,
+    phone: normalizedPhone,
+    smsReminderNumber: normalizedPhone,
     // Pickup → "Pick-up location" radioInput. Try multiple param shapes — Cal.com version dependent.
     location: booking.pickup,
     attendeeAddress: booking.pickup,
