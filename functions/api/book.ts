@@ -230,8 +230,8 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     smsReminderNumber: normalizedPhone,
     'attendeePhoneNumber': normalizedPhone,
     phone: normalizedPhone,
-    // Pickup → dedicated custom text field "pickup-address" (reliably prefillable + exposes {pickup-address} workflow token)
-    'pickup-address': booking.pickup,
+    // Pickup → custom text field "pickup_location_manual" (your slug). Prefillable + exposes {pickup_location_manual} workflow token.
+    'pickup_location_manual': booking.pickup,
     // Dropoff → dedicated custom text field "Destination-address" (case-sensitive slug)
     'Destination-address': booking.dropoff || '',
     notes: notesForCal,
