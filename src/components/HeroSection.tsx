@@ -28,7 +28,7 @@ const HeroSection = () => {
           <img
             src={logoWide}
             alt="111 Elite Car Service"
-            className="w-44 h-44 md:w-96 md:h-96 mx-auto object-contain"
+            className="w-72 h-72 md:w-[34rem] md:h-[34rem] mx-auto object-contain"
           />
         </motion.div>
 
@@ -38,16 +38,16 @@ const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="text-5xl md:text-7xl lg:text-8xl font-bold mb-4 leading-tight"
         >
-          Arrive in{" "}
-          <span className="text-primary">Style</span>
+          Ride with{" "}
+          <span className="text-primary">Confidence</span>
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.7 }}
-          className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto mb-12 whitespace-pre-line"
+          className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-12"
         >
-          Professional chauffeur service. Premium vehicles. Seamless service—every time.
+          111 Elite Car Service LLC is fully insured — safe, premium and reliable transportation every time.
         </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 20 }}

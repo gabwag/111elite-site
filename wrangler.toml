@@ -17,8 +17,14 @@ pages_build_output_dir = "./dist"
 # binding = "RATE_LIMIT_KV"
 # id = "FILL_AFTER_KV_CREATE"
 
-# Env vars are set in CF Pages dashboard (Settings > Environment variables):
-#   ALEX_EMAIL     — Alex's personal email address
-#   ALEX_PHONE     — Alex's 10-digit cell number (digits only, no dashes)
-#   FROM_EMAIL     — book@111elitecarservice.com
-#   RESEND_API_KEY — optional fallback if MailChannels unavailable
+# Non-secret env vars — baked into every deployment via wrangler.
+[vars]
+FROM_EMAIL = "bookings@send.111elitecarservice.com"
+ALEX_EMAIL = "hello@111elitecarservice.com"
+# CC address — until Google Workspace mailbox at hello@ is live, keep Proton so tests are received.
+# Also: second notification email (to be filled when user provides it) goes here.
+ALEX_EMAIL_CC = "aiwithgabe@proton.me"
+ALEX_PHONE = ""
+
+# Secrets stay in the CF Pages dashboard (set via REST API or UI):
+#   RESEND_API_KEY — client's Resend API key (already configured)
