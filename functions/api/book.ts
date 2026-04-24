@@ -217,9 +217,10 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   if (digits.length === 10) normalizedPhone = `+1${digits}`
   else if (digits.length === 11 && digits.startsWith('1')) normalizedPhone = `+${digits}`
   else if (booking.phone.startsWith('+')) normalizedPhone = booking.phone
-  // Dropoff goes into its own dedicated custom field on Cal.com ("Destination-address").
-  // Notes holds only what doesn't have a dedicated field: passengers, requested time, customer notes.
+  // Notes: include pickup as a fallback (Cal.com's prefill for the location radioInput is unreliable).
+  // Alex will see the pickup in both places if prefill works, or only in Notes if it doesn't.
   const notesForCal = [
+    `Pickup: ${booking.pickup}`,
     `Passengers: ${booking.passengers}`,
     `Requested time: ${booking.time}`,
     booking.notes ? `Customer notes: ${booking.notes}` : '',
@@ -228,13 +229,11 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     name: booking.name,
     email: booking.email,
     'attendeePhoneNumber': normalizedPhone,
-    // Pickup → the "Pick-up location" radioInput field.
-    // radioInput fields need nested params: location[value] = which option, location[optionValue] = the text.
-    // 'attendeeInPerson' is Cal.com's internal key for the "attendeeAddress" location option.
+    // Pickup → "Pick-up location" radioInput. Try multiple param shapes — Cal.com version dependent.
+    location: booking.pickup,
+    attendeeAddress: booking.pickup,
     'location[value]': 'attendeeInPerson',
     'location[optionValue]': booking.pickup,
-    // Fallback flat param (picked up by some Cal.com versions / also used by the workflow {LOCATION} token)
-    attendeeAddress: booking.pickup,
     // Dropoff → dedicated custom field "Destination-address" (slug is case-sensitive)
     'Destination-address': booking.dropoff || '',
     notes: notesForCal,
