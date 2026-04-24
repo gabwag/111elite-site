@@ -228,9 +228,13 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     name: booking.name,
     email: booking.email,
     'attendeePhoneNumber': normalizedPhone,
-    // Pickup → the "Pick-up location" field (type: attendeeAddress / radioInput slug=location)
+    // Pickup → the "Pick-up location" radioInput field.
+    // radioInput fields need nested params: location[value] = which option, location[optionValue] = the text.
+    // 'attendeeInPerson' is Cal.com's internal key for the "attendeeAddress" location option.
+    'location[value]': 'attendeeInPerson',
+    'location[optionValue]': booking.pickup,
+    // Fallback flat param (picked up by some Cal.com versions / also used by the workflow {LOCATION} token)
     attendeeAddress: booking.pickup,
-    location: booking.pickup,
     // Dropoff → dedicated custom field "Destination-address" (slug is case-sensitive)
     'Destination-address': booking.dropoff || '',
     notes: notesForCal,
