@@ -230,10 +230,10 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     smsReminderNumber: normalizedPhone,
     'attendeePhoneNumber': normalizedPhone,
     phone: normalizedPhone,
-    // Pickup → custom text field "pickup-address". Prefillable + exposes {pickup-address} workflow token.
-    'pickup-address': booking.pickup,
-    // Dropoff → dedicated custom text field "Destination-address" (case-sensitive slug)
-    'Destination-address': booking.dropoff || '',
+    // Custom text fields — slugs use underscores (Cal.com workflow tokens reject hyphens).
+    // Workflow tokens: {pickup_address} and {destination_address}
+    'pickup_address': booking.pickup,
+    'destination_address': booking.dropoff || '',
     notes: notesForCal,
     'metadata[pickup]': booking.pickup,
     'metadata[dropoff]': booking.dropoff || '',
