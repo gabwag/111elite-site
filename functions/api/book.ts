@@ -217,9 +217,9 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   if (digits.length === 10) normalizedPhone = `+1${digits}`
   else if (digits.length === 11 && digits.startsWith('1')) normalizedPhone = `+${digits}`
   else if (booking.phone.startsWith('+')) normalizedPhone = booking.phone
+  // Dropoff goes into its own dedicated custom field on Cal.com ("Destination-address").
+  // Notes holds only what doesn't have a dedicated field: passengers, requested time, customer notes.
   const notesForCal = [
-    `Pickup: ${booking.pickup}`,
-    booking.dropoff ? `Dropoff: ${booking.dropoff}` : '',
     `Passengers: ${booking.passengers}`,
     `Requested time: ${booking.time}`,
     booking.notes ? `Customer notes: ${booking.notes}` : '',
@@ -228,9 +228,11 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     name: booking.name,
     email: booking.email,
     'attendeePhoneNumber': normalizedPhone,
-    // Prefill the "In Person (Attendee Address)" location field with the pickup
+    // Pickup → the "Pick-up location" field (type: attendeeAddress / radioInput slug=location)
     attendeeAddress: booking.pickup,
     location: booking.pickup,
+    // Dropoff → dedicated custom field "Destination-address" (slug is case-sensitive)
+    'Destination-address': booking.dropoff || '',
     notes: notesForCal,
     'metadata[pickup]': booking.pickup,
     'metadata[dropoff]': booking.dropoff || '',
