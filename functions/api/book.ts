@@ -209,7 +209,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   // Build Cal.com prefill URL for the Ride Booking event
   // Alex opens this → lands on calendar for requested date → name/email/phone already filled → clicks slot
-  const calBase = 'https://cal.com/team/111-elite-car-service/ride'
+  const calBase = 'https://cal.com/team/111-elite-car-service/ride-booking'
   // Normalize phone to E.164 US format so Cal.com's phone input recognizes it as US
   // (raw digits without +1 can be parsed as random country codes — e.g. Chile +56)
   const digits = booking.phone.replace(/\D/g, '')
