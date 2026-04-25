@@ -218,7 +218,10 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   else if (digits.length === 11 && digits.startsWith('1')) normalizedPhone = `+${digits}`
   else if (booking.phone.startsWith('+')) normalizedPhone = booking.phone
   // Notes: passengers + requested time + customer notes only (pickup/dropoff have their own fields).
+  // Pickup address goes FIRST so {ADDITIONAL_NOTES} workflow token surfaces it in the SMS.
   const notesForCal = [
+    `Pickup: ${booking.pickup}`,
+    booking.dropoff ? `Dropoff: ${booking.dropoff}` : '',
     `Passengers: ${booking.passengers}`,
     `Requested time: ${booking.time}`,
     booking.notes ? `Customer notes: ${booking.notes}` : '',
