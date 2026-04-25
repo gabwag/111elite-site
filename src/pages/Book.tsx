@@ -15,6 +15,7 @@ export default function Book() {
   const [state, setState] = useState<SubmitState>("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [passengers, setPassengers] = useState("1");
+  const [time, setTime] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -29,7 +30,7 @@ export default function Book() {
       pickup: fd.get("pickup") as string,
       dropoff: fd.get("dropoff") as string,
       date: fd.get("date") as string,
-      time: fd.get("time") as string,
+      time,
       passengers,
       notes: fd.get("notes") as string,
       website: fd.get("website") as string, // honeypot
@@ -136,8 +137,22 @@ export default function Book() {
                     <Input id="date" name="date" type="date" required className="rounded-none bg-card border-border focus:border-primary" style={{ colorScheme: "dark" }} />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="time" className="tracking-widest uppercase text-xs text-muted-foreground">Time *</Label>
-                    <Input id="time" name="time" type="time" required className="rounded-none bg-card border-border focus:border-primary" style={{ colorScheme: "dark" }} />
+                    <Label className="tracking-widest uppercase text-xs text-muted-foreground">Time *</Label>
+                    <Select value={time} onValueChange={setTime} required>
+                      <SelectTrigger className="rounded-none bg-card border-border focus:border-primary">
+                        <SelectValue placeholder="Select time" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Array.from({ length: 32 }, (_, i) => {
+                          const totalMins = 360 + i * 30; // 6:00 AM to 9:30 PM
+                          const h = Math.floor(totalMins / 60);
+                          const m = totalMins % 60;
+                          const label = `${h % 12 || 12}:${m.toString().padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`;
+                          const value = `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`;
+                          return <SelectItem key={value} value={value}>{label}</SelectItem>;
+                        })}
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div className="space-y-2">
                     <Label className="tracking-widest uppercase text-xs text-muted-foreground">Passengers</Label>
