@@ -238,6 +238,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     'pickup_address': booking.pickup,
     'destination_address': booking.dropoff || '',
     notes: notesForCal,
+    additionalNotes: notesForCal,
     'metadata[pickup]': booking.pickup,
     'metadata[dropoff]': booking.dropoff || '',
     'metadata[passengers]': booking.passengers,
